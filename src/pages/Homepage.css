@@ -23,11 +23,12 @@
     transform: scale(1.05);
   }
 
-  .main-content {
-    max-width: 600px;
+  .content-wrapper {
+    max-width: 1100px; /* กำหนดค่ากลางที่คุณต้องการ */
     margin: 0 auto;
     padding: 20px;
   }
+  
 
   .hannah-card {
     background: linear-gradient(135deg, #1976d2, #7b1fa2);

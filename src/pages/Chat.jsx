@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Users, MessageCircle, X, Upload } from 'lucide-react';
-import './Grouplist.css';
+import './Chat.css';
 import Navbar from '../components/Navbar';
 
-const ChatGroupPage = () => {
+const Chat = () => {
   const [activeItem, setActiveItem] = useState('chat');
   const [searchTerm, setSearchTerm] = useState('');
   const [groupSearch, setGroupSearch] = useState('');
@@ -93,7 +93,7 @@ const ChatGroupPage = () => {
       />
 
       {/* Chat Content */}
-      <div className="chat-container">
+      <div className="content-wrapper">
         <div className="page-header">
           <button className="create-group-btn" onClick={() => setIsModalOpen(true)}>
             <Users size={20} />
@@ -188,4 +188,4 @@ const ChatGroupPage = () => {
   );
 };
 
-export default ChatGroupPage;
+export default Chat;

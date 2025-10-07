@@ -132,7 +132,7 @@ const Homepage = () => {
 
       <button className="fab" onClick={() => setIsModalOpen(true)}><Plus size={28} /></button>
 
-      <div className="main-content">
+      <div className="content-wrapper">
         <Hannah />
 
         {[...posts, ...samplePosts].map((post) => (
