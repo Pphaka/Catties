@@ -14,6 +14,8 @@ const Navbar = ({ searchTerm, setSearchTerm, brand }) => {
   const location = useLocation(); // ดึง path ปัจจุบัน
 
   return (
+ 
+
     <nav className="navbar">
       <div className="navbar-container">
         <h1 className="brand">{brand}</h1>

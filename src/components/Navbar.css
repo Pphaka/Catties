@@ -1,106 +1,146 @@
 .app-container {
-    font-family: sans-serif;
-    min-height: 100vh;
-    background: #fff6f6;
-    padding-top: 160px;
-  }
-  
-  .navbar {
-    background: linear-gradient(to right, #b8d9ff 0%, #feead3 100%);
-    border-bottom: 1px solid #e0e0e0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 40;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
+  font-family: sans-serif;
+  min-height: 100vh;
+  background: #ffffff;
+  padding-top: 550px;
+}
+
+.navbar {
+  background: linear-gradient(to right, #b8d9ff 0%, #feead3 100%);
+  border-bottom: 1px solid #e0e0e0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 40;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1976d2;
+  margin: 0;
+}
+
+.search-container {
+  flex: 1;
+  max-width: 400px;
+  margin: 0 30px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s;
+  background: white;
+}
+
+.search-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.nav-items {
+  display: flex;
+  gap: 5px;
+}
+
+.nav-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.nav-button.active {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.nav-button.inactive {
+  color: #666;
+}
+
+.nav-button.inactive:hover {
+  background: #f5f5f5;
+}
+
+.nav-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+.nav-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
+    padding: 12px 15px;
   }
-  
+
   .brand {
-    font-size: 28px;
-    font-weight: bold;
-    color: #1976d2;
-    margin: 0;
+    font-size: 22px;
   }
-  
+
   .search-container {
-    flex: 1;
-    max-width: 400px;
-    margin: 0 30px;
-    position: relative;
+    max-width: 300px;
+    margin: 0 15px;
   }
-  
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 10px 10px 10px 40px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
-    font-size: 16px;
-    outline: none;
-    transition: all 0.3s;
-  }
-  
-  .search-input:focus {
-    border-color: #1976d2;
-    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
-  }
-  
-  .nav-items {
-    display: flex;
-    gap: 5px;
-  }
-  
+
   .nav-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 8px 12px;
-    border: none;
-    background: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
+    padding: 6px 10px;
   }
-  
-  .nav-button.active {
-    background: #e3f2fd;
-    color: #1976d2;
-  }
-  
-  .nav-button.inactive {
-    color: #666;
-  }
-  
-  .nav-button.inactive:hover {
-    background: #f5f5f5;
-  }
-  
-  .nav-icon {
-    font-size: 20px;
-    margin-bottom: 2px;
-  }
-  
+
   .nav-label {
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 11px;
   }
+}
+
+@media (max-width: 480px) {
+  .search-container {
+    display: none;
+  }
+
+  .brand {
+    font-size: 20px;
+  }
+
+  .nav-button {
+    padding: 6px 8px;
+  }
+}

@@ -1,0 +1,443 @@
+/* Post.css */
+.post-container {
+  font-family: system-ui, -apple-system, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 100px; 
+}
+
+/* ===============================
+   🔵 โซนโพสต์หลัก (Post Cards)
+=============================== */
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.post-card {
+  text-align: left;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.post-header {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0f2f5;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.author-info h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.author-info p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #888;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-btn:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  z-index: 60;
+  min-width: 160px;
+  overflow: hidden;
+  animation: fadeIn 0.1s ease-out;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+  color: #333;
+}
+
+.dropdown-item:hover {
+  background: #f8f8f8;
+}
+
+.dropdown-item.delete {
+  color: #e53e3e;
+}
+
+.dropdown-item.delete:hover {
+  background: #fff5f5;
+}
+
+.post-title {
+  padding: 8px 20px;
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.post-content {
+  padding: 0 20px 16px;
+  margin: 0;
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ✨ ===============================
+   ✨ Gallery สำหรับแสดงหลายรูปภาพ - แก้ไขใหม่แบบ Facebook
+   ✨ =============================== */
+.post-image-gallery {
+  display: flex; /* เปลี่ยนจาก grid */
+  flex-direction: column; /* เรียงแนวตั้ง */
+  align-items: center; /* จัดกึ่งกลาง */
+  gap: 0; /* ไม่มีช่องว่าง */
+  background: #000; /* พื้นหลังดำ */
+  margin: 0 -1px; /* ยื่นออกจากขอบ card นิดหน่อย */
+}
+
+.post-image-gallery img {
+  width: 100%; /* เต็มความกว้าง */
+  height: auto; /* ความสูงปรับตามอัตราส่วน */
+  max-height: 600px; /* จำกัดความสูงสูงสุด */
+  object-fit: contain; /* แสดงรูปเต็มไม่ crop */
+  background: #000; /* พื้นหลังดำ */
+  display: block;
+}
+
+/* ลบ layout classes เดิม */
+.post-image-gallery.layout-1,
+.post-image-gallery.layout-2,
+.post-image-gallery.layout-3,
+.post-image-gallery.layout-4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: none; /* ยกเลิกการจำกัดความสูง */
+  aspect-ratio: auto; /* ยกเลิก aspect ratio */
+}
+
+.post-image-gallery.layout-3 img:first-child {
+  grid-row: unset; /* ยกเลิก grid property */
+}
+/* =============================== */
+
+/* ปุ่ม Actions */
+.post-card .post-actions {
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.action-btn {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: #efefef;
+}
+
+.action-btn.liked {
+  color: #e91e63;
+}
+
+.action-btn.liked:hover {
+  background: #ffe4ec;
+}
+
+.action-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ✨ ===============================
+   ✨ ปุ่มเข้าร่วม (Join Now)
+   ✨ =============================== */
+.post-join-section {
+  padding: 8px 20px 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.join-now-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #0f4a79 0%, #215488 100%); 
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(86, 141, 230, 0.3);
+}
+
+.join-now-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(86, 141, 230, 0.4);
+}
+
+.join-now-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(86, 141, 230, 0.3);
+}
+/* =============================== */
+
+
+/* ===============================
+   💬 โซนความคิดเห็น (Comments)
+=============================== */
+.comments-section {
+  padding: 16px 20px;
+  background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+}
+
+.comments-list {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid #efefef;
+}
+
+.comment strong {
+  color: #1a1a1a;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.comment p {
+  margin: 0;
+  color: #444;
+}
+
+.comment-time {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #999;
+}
+
+.comment-input-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.comment-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.send-comment-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+}
+
+.send-comment-btn:hover {
+  background: #1565c0;
+  transform: scale(1.08);
+}
+
+.send-comment-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===============================
+   ⚪️ ปุ่มลอย (FAB)
+=============================== */
+.post-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+  transition: all 0.3s ease;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-fab:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 8px 28px rgba(25, 118, 210, 0.5);
+}
+
+.post-fab:active {
+  transform: scale(1.05) rotate(90deg);
+}
+
+/* ===============================
+   📱 Responsive Design
+=============================== */
+@media (max-width: 640px) {
+  .post-container {
+    padding: 0;
+    padding-bottom: 90px;
+  }
+  
+  .post-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .post-header {
+    padding: 14px 16px;
+  }
+  
+  .post-title {
+    padding: 8px 16px;
+    font-size: 17px;
+  }
+  
+  .post-content {
+    padding: 0 16px 14px;
+  }
+
+  .post-image-gallery {
+    margin: 0; /* ลบ margin ในมือถือ */
+  }
+  
+  .post-card .post-actions {
+    padding: 4px 16px;
+  }
+
+  /* ✨ Responsive for Join Button */
+  .post-join-section {
+    padding: 8px 16px 16px;
+  }
+  
+  .action-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+  
+  .post-fab {
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+  }
+}
