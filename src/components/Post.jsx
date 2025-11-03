@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Heart, MessageCircle, MoreVertical, Edit, Trash2, Send } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Feb from './Feb';
+import PostCard from './PostCard';
 import './Post.css';
 
-// ✨ ข้อมูลโพสต์ตัวอย่าง
 const initialPosts = [
   {
     id: 101,
@@ -21,39 +21,41 @@ const initialPosts = [
     likes: 42,
     comments: [],
     isOwner: false,
-    chatGroupId: '1', // <-- ลิงก์ไปยังแชทกลุ่ม 'Nomad Collective'
+    chatGroupId: '1',
+    maxMembers: 10,
+    currentMembers: 7,
   },
-  
+  {
+    id: 102,
+    author: {
+      name: 'Sarah',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+    },
+    timestamp: '15 ตุลาคม 2025',
+    title: 'Latitude Lovers - ทริปเต็มแล้ว!',
+    content: 'ขอบคุณทุกคนที่สนใจนะคะ กลุ่มเต็มแล้วค่ะ แต่สามารถติดตามการเดินทางของเราได้เลย!',
+    images: [
+      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60',
+    ],
+    likes: 28,
+    comments: [],
+    isOwner: false,
+    chatGroupId: '2',
+    maxMembers: 10,
+    currentMembers: 10,
+  },
 ];
 
-
 const Post = ({ currentUser }) => {
-  // Hook สำหรับการเปลี่ยนหน้า (Routing)
   const navigate = useNavigate();
-
-  // ✨ แก้ไข: ใช้ initialPosts เป็นค่าเริ่มต้นของ state
   const [posts, setPosts] = useState(initialPosts);
-  
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [showComments, setShowComments] = useState(new Set());
   const [showDropdown, setShowDropdown] = useState(null);
   const [commentInputs, setCommentInputs] = useState({});
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
 
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowDropdown(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-  
   const handleOpenCreateModal = () => {
     setEditingPost(null);
     setIsModalOpen(true);
@@ -73,8 +75,9 @@ const Post = ({ currentUser }) => {
       likes: 0,
       comments: [],
       isOwner: true,
-      // สมมติว่าโพสต์ใหม่จะเชื่อมไปยังกลุ่มแชท ID '1' เพื่อการทดสอบ
-      chatGroupId: '1'
+      chatGroupId: String(Date.now()),
+      maxMembers: postData.maxMembers || 10,
+      currentMembers: 0,
     };
     setPosts(prev => [newPost, ...prev]);
   };
@@ -83,7 +86,10 @@ const Post = ({ currentUser }) => {
     setPosts(prevPosts =>
       prevPosts.map(p =>
         p.id === editingPost.id
-          ? { ...p, ...updatedData }
+          ? { ...p, 
+            ...updatedData,
+            maxMembers: updatedData.maxMembers || p.maxMembers 
+          }
           : p
       )
     );
@@ -139,10 +145,26 @@ const Post = ({ currentUser }) => {
     setCommentInputs(prev => ({ ...prev, [id]: value }));
   };
 
-  // ฟังก์ชันสำหรับจัดการการคลิกปุ่ม "Join Now"
-  const handleJoinChat = (chatId) => {
+  const handleJoinChat = (postId, chatId) => {
+    const post = posts.find(p => p.id === postId);
+    
+    if (!post) return;
+    
+    // ตรวจสอบว่าเต็มหรือไม่
+    if (post.currentMembers >= post.maxMembers) {
+      alert('ขอโทษครับ! กลุ่มนี้เต็มแล้ว (10/10 คน) 😢');
+      return;
+    }
+    
+    // เพิ่มจำนวนสมาชิก
+    setPosts(prev => prev.map(p =>
+      p.id === postId
+        ? { ...p, currentMembers: p.currentMembers + 1 }
+        : p
+    ));
+    
+    // นำทางไปหน้าแชท
     if (chatId) {
-      // ไปยังหน้าแชทตาม path ที่เรากำหนดใน Router (เช่น /chat/1)
       navigate(`/chat/${chatId}`);
     } else {
       console.error("ไม่พบ ID สำหรับแชทกลุ่มนี้!");
@@ -157,99 +179,23 @@ const Post = ({ currentUser }) => {
 
       <div className="post-list">
         {posts.map(post => (
-          <div key={post.id} className="post-card">
-            <div className="post-header">
-              <div className="post-author">
-                <img src={post.author.avatar} alt={post.author.name} className="author-avatar" />
-                <div className="author-info">
-                  <h3>{post.author.name}</h3>
-                  <p>{post.timestamp}</p>
-                </div>
-              </div>
-              {post.isOwner && (
-                <div className="dropdown" ref={dropdownRef}>
-                  <button className="dropdown-btn" onClick={() => setShowDropdown(showDropdown === post.id ? null : post.id)}>
-                    <MoreVertical />
-                  </button>
-                  {showDropdown === post.id && (
-                    <div className="dropdown-menu">
-                      <button className="dropdown-item" onClick={() => handleOpenEditModal(post)}>
-                        <Edit size={16} /> แก้ไข
-                      </button>
-                      <button className="dropdown-item delete" onClick={() => deletePost(post.id)}>
-                        <Trash2 size={16} /> ลบ
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {post.title && <h2 className="post-title">{post.title}</h2>}
-            {post.content && <p className="post-content">{post.content}</p>}
-
-            {post.images && post.images.length > 0 && (
-              <div className={`post-image-gallery layout-${Math.min(post.images.length, 4)}`}>
-                {post.images.map((imageUrl, index) => (
-                  <img key={index} src={imageUrl} alt={`post content ${index + 1}`} />
-                ))}
-              </div>
-            )}
-
-            <div className="post-actions">
-              <button 
-                className={`action-btn ${likedPosts.has(post.id) ? 'liked' : ''}`}
-                onClick={() => toggleLike(post.id)}
-              >
-                <Heart fill={likedPosts.has(post.id) ? 'currentColor' : 'none'} />
-                <span>{post.likes}</span>
-              </button>
-              <button className="action-btn" onClick={() => toggleComments(post.id)}>
-                <MessageCircle />
-                <span>{post.comments.length}</span>
-              </button>
-            </div>
-
-            {/* เพิ่มปุ่ม Join Now และฟังก์ชัน onClick */}
-            <div className="post-join-section">
-              <button 
-                className="join-now-btn"
-                onClick={() => handleJoinChat(post.chatGroupId)}
-              >
-                เข้าร่วมเลย (Join Now)
-              </button>
-            </div>
-
-            {showComments.has(post.id) && (
-              <div className="comments-section">
-                <div className="comments-list">
-                  {post.comments.map((comment, idx) => (
-                    <div key={idx} className="comment">
-                      <strong>{comment.author}</strong>
-                      <p>{comment.text}</p>
-                      {comment.timestamp && <span className="comment-time">{comment.timestamp}</span>}
-                    </div>
-                  ))}
-                </div>
-                <div className="comment-input-wrapper">
-                  <input
-                    type="text"
-                    placeholder="เขียนความคิดเห็น..."
-                    value={commentInputs[post.id] || ''}
-                    onChange={(e) => handleCommentInput(post.id, e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && addComment(post.id)}
-                    className="comment-input"
-                  />
-                  <button 
-                    className="send-comment-btn"
-                    onClick={() => addComment(post.id)}
-                  >
-                    <Send size={18} />
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+          <PostCard
+            key={post.id}
+            post={post}
+            currentUser={currentUser}
+            likedPosts={likedPosts}
+            showComments={showComments}
+            commentInputs={commentInputs}
+            toggleLike={toggleLike}
+            toggleComments={toggleComments}
+            handleCommentInput={handleCommentInput}
+            addComment={addComment}
+            handleJoinChat={handleJoinChat}
+            showDropdown={showDropdown}
+            setShowDropdown={setShowDropdown}
+            handleOpenEditModal={handleOpenEditModal}
+            deletePost={deletePost}
+          />
         ))}
       </div>
       
@@ -264,4 +210,3 @@ const Post = ({ currentUser }) => {
 };
 
 export default Post;
-

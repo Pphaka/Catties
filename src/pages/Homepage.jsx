@@ -125,7 +125,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-con">
       <Navbar
         activeItem={activeItem}
         setActiveItem={setActiveItem}

@@ -7,7 +7,8 @@ const GroupList = ({
   searchTerm, 
   onSearchChange, 
   onChatClick, 
-  onCreateGroup 
+  onCreateGroup,
+  currentUser = 'คุณ'
 }) => {
   return (
     <div className="content-wrapper">
@@ -34,7 +35,8 @@ const GroupList = ({
             <GroupCard 
               key={group.id} 
               group={group} 
-              onChatClick={onChatClick} 
+              onChatClick={onChatClick}
+              currentUser={currentUser}
             />
           ))
         ) : (

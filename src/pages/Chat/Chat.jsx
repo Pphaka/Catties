@@ -1,38 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
-import GroupList from '../../components/Chat/GroupList';
-import ChatWindow from '../../components/Chat/ChatWindow';
-import CreateGroupModal from '../../components/Chat/CreateGroupModal';
-import LocationModal from '../../components/Chat/LocationModal';
+import Navbar from "../../components/Navbar";
+import GroupList from './components/GroupList';
+import ChatWindow from './components/ChatWindow';
+import CreateGroupModal from './components/CreateGroupModal';
+import LocationModal from './components/LocationModal';
 import './Chat.css';
-
 
 const Chat = () => {
   const { groupId } = useParams();
   
-  // Search & UI states
   const [groupSearch, setGroupSearch] = useState('');
   const [activeChat, setActiveChat] = useState(null);
   const [currentUser] = useState('คุณ');
   const [isTripEnded, setIsTripEnded] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   
-  // Create Group Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
+  const [newGroupMaxMembers, setNewGroupMaxMembers] = useState(10);
   const [newGroupAvatar, setNewGroupAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
   
-  // Message states
   const [messageInput, setMessageInput] = useState('');
   
-  // Location Modal states
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [searchLocation, setSearchLocation] = useState('');
 
-  // Groups data
   const [groups, setGroups] = useState([
     {
       id: '1',
@@ -41,6 +36,9 @@ const Chat = () => {
       description: 'Doughnut : พรุ่งนี้เราเจอกัน 7:00 น. นะคะ',
       date: '1 May 2025',
       unread: 3,
+      maxMembers: 10,
+      currentMembers: 10, // ✅ แก้เป็น 8 ให้ตรงกับจำนวน members
+      members: ['Doughnut', 'Alex', 'Sarah', 'John', 'Mike', 'Lisa', 'Tom', 'คุณ','Tan','Tristan'],
       messages: [
         { id: 1, sender: 'Doughnut', text: 'สวัสดีค่ะทุกคน!', time: '10:30', isOwn: false },
         { id: 2, sender: 'Alex', text: 'สวัสดีครับ', time: '10:32', isOwn: false },
@@ -54,14 +52,31 @@ const Chat = () => {
       description: 'คุม : โอเคคับบ',
       date: '30 April 2025',
       unread: 0,
+      maxMembers: 5,
+      currentMembers: 5,
+      members: ['Sarah', 'คุม', 'Anna', 'David', 'Emma'],
       messages: [
         { id: 1, sender: 'Sarah', text: 'เราไปเที่ยวกันไหม?', time: '09:15', isOwn: false },
         { id: 2, sender: 'คุม', text: 'โอเคคับบ', time: '09:20', isOwn: false }
       ],
+    },
+    {
+      id: '3',
+      name: 'Adventure Seekers',
+      avatar: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+      description: 'คุณ : เจอกันวันเสาร์นะครับ',
+      date: '2 May 2025',
+      unread: 1,
+      maxMembers: 8,
+      currentMembers: 4,
+      members: ['คุณ', 'Jane', 'Mark', 'Peter'],
+      messages: [
+        { id: 1, sender: 'Jane', text: 'ใครพร้อมแล้วบ้าง?', time: '14:20', isOwn: false },
+        { id: 2, sender: 'คุณ', text: 'เจอกันวันเสาร์นะครับ', time: '14:25', isOwn: true }
+      ],
     }
   ]);
 
-  // Load Google Maps Script
   useEffect(() => {
     if (!window.google) {
       const script = document.createElement('script');
@@ -72,7 +87,6 @@ const Chat = () => {
     }
   }, []);
 
-  // Open chat from URL
   useEffect(() => {
     if (!groupId) return;
     const groupToOpen = groups.find(g => g.id === groupId);
@@ -81,7 +95,6 @@ const Chat = () => {
     }
   }, [groupId, groups, activeChat]);
 
-  // Avatar upload handler
   const handleAvatarUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
@@ -93,7 +106,6 @@ const Chat = () => {
     e.target.value = '';
   };
 
-  // Create group handler
   const handleCreateGroup = () => {
     if (!newGroupName.trim()) return;
     const newGroup = {
@@ -103,26 +115,76 @@ const Chat = () => {
       description: 'ยังไม่มีข้อความ',
       date: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' }),
       unread: 0,
+      maxMembers: parseInt(newGroupMaxMembers) || 10,
+      currentMembers: 1,
+      members: [currentUser],
       messages: []
     };
     setGroups(prev => [newGroup, ...prev]);
     setIsModalOpen(false);
     setNewGroupName('');
+    setNewGroupMaxMembers(10);
     setNewGroupAvatar(null);
     setAvatarPreview(null);
   };
 
-  // Chat click handler
+  // ✅ แก้ไข handleChatClick ให้กระชับขึ้น
   const handleChatClick = (clickedGroupId) => {
-    const group = groups.find(g => g.id === clickedGroupId);
-    setActiveChat(group);
-    setIsTripEnded(false);
+    // ดึงข้อมูลกลุ่มล่าสุดจาก state
+    const currentGroups = groups;
+    const group = currentGroups.find(g => g.id === clickedGroupId);
+    
+    if (!group) return;
+  
+    const isAlreadyMember = group.members.includes(currentUser);
+    const isFull = group.currentMembers >= group.maxMembers;
+  
+    // ✅ ถ้าเป็นสมาชิกอยู่แล้ว → เปิดแชทได้เลย (ไม่สนใจว่าเต็มหรือไม่)
+    if (isAlreadyMember) {
+      setActiveChat(group);
+      setIsTripEnded(false);
+      setGroups(prev =>
+        prev.map(g =>
+          g.id === clickedGroupId ? { ...g, unread: 0 } : g
+        )
+      );
+      return; // ✅ จบตรงนี้เลย
+    }
+  
+    // ✅ ถึงตรงนี้แปลว่า: ยังไม่ได้เป็นสมาชิก
+    
+    // ถ้ากลุ่มเต็ม → ห้ามเข้า
+    if (isFull) {
+      alert('กลุ่มนี้เต็มแล้ว ไม่สามารถเข้าร่วมได้');
+      return;
+    }
+  
+    // ถ้ากลุ่มยังไม่เต็ม → เพิ่มเข้ากลุ่ม
     setGroups(prev =>
-      prev.map(g => g.id === clickedGroupId ? { ...g, unread: 0 } : g)
+      prev.map(g =>
+        g.id === clickedGroupId
+          ? {
+              ...g,
+              members: [...g.members, currentUser],
+              currentMembers: g.currentMembers + 1,
+              unread: 0
+            }
+          : g
+      )
     );
+  
+    // สร้าง group object ใหม่ที่มี currentUser แล้ว
+    const updatedGroup = {
+      ...group,
+      members: [...group.members, currentUser],
+      currentMembers: group.currentMembers + 1,
+      unread: 0
+    };
+  
+    setActiveChat(updatedGroup);
+    setIsTripEnded(false);
   };
 
-  // Send message handler
   const handleSendMessage = () => {
     if (!messageInput.trim() || !activeChat || isTripEnded) return;
 
@@ -150,7 +212,6 @@ const Chat = () => {
     setMessageInput('');
   };
 
-  // Send location handler
   const handleSendLocation = () => {
     if (!selectedLocation || !activeChat || isTripEnded) return;
 
@@ -186,14 +247,13 @@ const Chat = () => {
     setSearchLocation('');
   };
 
-  // End trip handler
   const handleEndTrip = () => {
     if (!activeChat) return;
     setIsTripEnded(true);
     setGroups(prev =>
       prev.map(group =>
         group.id === activeChat.id
-          ? { ...group, description: 'ทริปนี้จบแล้ว ✅' }
+          ? { ...group, description: 'ทริปนี้จบแล้ว' }
           : group
       )
     );
@@ -201,8 +261,9 @@ const Chat = () => {
     window.location.href = `/end-trip/${activeChat.id}`;
   };
 
-  // Filter groups by search
-  const filteredGroups = groups.filter(g => 
+  // ✅ กรองเฉพาะกลุ่มที่เราเป็นสมาชิก
+  const myGroups = groups.filter(g => g.members.includes(currentUser));
+  const filteredGroups = myGroups.filter(g => 
     g.name.toLowerCase().includes(groupSearch.toLowerCase())
   );
 
@@ -217,6 +278,7 @@ const Chat = () => {
           onSearchChange={setGroupSearch}
           onChatClick={handleChatClick}
           onCreateGroup={() => setIsModalOpen(true)}
+          currentUser={currentUser}
         />
       ) : (
         <ChatWindow
@@ -236,9 +298,11 @@ const Chat = () => {
       <CreateGroupModal
         isOpen={isModalOpen}
         groupName={newGroupName}
+        maxMembers={newGroupMaxMembers}
         avatarPreview={avatarPreview}
         onClose={() => setIsModalOpen(false)}
         onNameChange={setNewGroupName}
+        onMaxMembersChange={setNewGroupMaxMembers}
         onAvatarUpload={handleAvatarUpload}
         onCreateGroup={handleCreateGroup}
       />

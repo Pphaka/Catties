@@ -18,6 +18,8 @@ const PostCard = ({
   handleOpenEditModal,
   deletePost
 }) => {
+  const isFull = post.currentMembers >= post.maxMembers;
+
   return (
     <div className="post-card">
       {/* Header */}
@@ -29,7 +31,6 @@ const PostCard = ({
             <p>{post.timestamp}</p>
           </div>
         </div>
-
         {post.isOwner && (
           <div className="dropdown">
             <button className="dropdown-btn" onClick={() => setShowDropdown(showDropdown === post.id ? null : post.id)}>
@@ -63,7 +64,7 @@ const PostCard = ({
 
       {/* Actions */}
       <div className="post-actions">
-        <button 
+        <button
           className={`action-btn ${likedPosts.has(post.id) ? 'liked' : ''}`}
           onClick={() => toggleLike(post.id)}
         >
@@ -76,13 +77,18 @@ const PostCard = ({
         </button>
       </div>
 
-      {/* Join Button */}
+      {/* Join Section */}
       <div className="post-join-section">
-        <button 
+        <div className={`post-member-count ${isFull ? 'full' : ''}`}>
+          {post.currentMembers}/{post.maxMembers} คน
+          {isFull && ' - เต็มแล้ว!'}
+        </div>
+        <button
           className="join-now-btn"
-          onClick={() => handleJoinChat(post.chatGroupId)}
+          onClick={() => handleJoinChat(post.id, post.chatGroupId)}
+          disabled={isFull}
         >
-          เข้าร่วมเลย (Join Now)
+          {isFull ? '❌ กลุ่มเต็มแล้ว' : '✅ เข้าร่วมเลย (Join Now)'}
         </button>
       </div>
 
@@ -107,7 +113,7 @@ const PostCard = ({
               onKeyPress={(e) => e.key === 'Enter' && addComment(post.id)}
               className="comment-input"
             />
-            <button 
+            <button
               className="send-comment-btn"
               onClick={() => addComment(post.id)}
             >

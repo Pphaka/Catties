@@ -17,6 +17,7 @@ const ChatWindow = ({
 }) => {
   return (
     <div className="chat-container">
+      
       <ChatHeader
         chat={chat}
         onBack={onBack}
@@ -24,7 +25,7 @@ const ChatWindow = ({
         onToggleOptions={onToggleOptions}
         onEndTrip={onEndTrip}
       />
-      
+    
       <MessageList messages={chat.messages} />
       
       <MessageInput

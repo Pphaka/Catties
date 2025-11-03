@@ -204,3 +204,93 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+  /* ✨ ส่วนกำหนดจำนวนคนร่วมทริป */
+.max-members-section {
+  margin: 16px 0;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.max-members-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.max-members-input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.member-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #0f4a79;
+  background: white;
+  color: #0f4a79;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-btn:hover:not(:disabled) {
+  background: #0f4a79;
+  color: white;
+  transform: scale(1.05);
+}
+
+.member-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.max-members-input {
+  width: 80px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f4a79;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.max-members-input:focus {
+  border-color: #0f4a79;
+  box-shadow: 0 0 0 3px rgba(15, 74, 121, 0.1);
+}
+
+/* ซ่อน arrows ของ input number */
+.max-members-input::-webkit-inner-spin-button,
+.max-members-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none; /* ✅ มาตรฐาน */
+  margin: 0;
+}
+
+.max-members-input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield; /* ✅ มาตรฐาน */
+}
+
+.max-members-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}

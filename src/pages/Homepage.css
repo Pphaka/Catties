@@ -1,8 +1,11 @@
+.app-con{
+  padding-top: 390px;
+}
 .content-wrapper {
-  max-width: 680px; /* เปลี่ยนจาก 1100px */
+  max-width: 680px;
   margin: 0 auto;
-  padding: 20px;
-  padding-top: 90px; /* เพิ่ม: ระยะห่างจาก navbar */
+  padding: 20px; 
+  padding-top: 390px;
 }
 
 .hannah-card {
@@ -12,9 +15,9 @@
   margin-bottom: 24px;
   color: white;
   text-align: center;
-  max-width: 600px; /* เพิ่ม: จำกัดความกว้างให้เท่า post */
-  margin-left: auto; /* เพิ่ม: จัดกึ่งกลาง */
-  margin-right: auto; /* เพิ่ม: จัดกึ่งกลาง */
+  max-width: 600px; 
+  margin-left: auto; 
+  margin-right: auto; 
 }
 
 .hannah-card h2 {
@@ -415,13 +418,10 @@
   .content-wrapper {
     max-width: 100%;
     padding: 16px;
-    padding-top: 100px; /* เพิ่ม */
+    /* ❌ ลบ 'padding-top: 100px;' ออก */
   }
 
-  .app-container {
-    padding-top: 120px;
-  }
-
+  /* ... (CSS ที่เหลือใน Media Query ไม่ต้องแก้) ... */
   .navbar-container {
     flex-direction: column;
     gap: 16px;

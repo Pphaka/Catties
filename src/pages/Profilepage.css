@@ -1,5 +1,7 @@
+.head{
+  padding-top: 390px;
+}
 
-/* Typography & Colors */
 .hero-title, .modal-title, .profile-name, .section-title, .bio-title {
   color: #2c3e50;
 }

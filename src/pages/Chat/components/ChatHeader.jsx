@@ -16,7 +16,7 @@ const ChatHeader = ({
       <img src={chat.avatar} alt={chat.name} className="chat-avatar" />
       <div className="chat-header-info">
         <h3>{chat.name}</h3>
-        <p>{chat.description}</p>
+        <p className="member-info">{chat.currentMembers}/{chat.maxMembers} คน</p>
       </div>
 
       <div className="chat-options">

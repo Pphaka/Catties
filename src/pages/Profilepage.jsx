@@ -200,7 +200,7 @@ const ProfilePage = () => {
   const renderStars = (count) => '⭐'.repeat(count) + '☆'.repeat(5 - count);
 
   return (
-    <div className="app-container">
+    <div className="head">
       <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} brand="TripTogether" />
       <div className="hero-section" style={{ background: profileData.coverColor }}></div>
 

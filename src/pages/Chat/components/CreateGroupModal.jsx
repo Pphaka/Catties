@@ -3,10 +3,12 @@ import { X, Upload } from 'lucide-react';
 
 const CreateGroupModal = ({ 
   isOpen, 
-  groupName, 
+  groupName,
+  maxMembers,
   avatarPreview,
   onClose, 
-  onNameChange, 
+  onNameChange,
+  onMaxMembersChange,
   onAvatarUpload, 
   onCreateGroup 
 }) => {
@@ -29,6 +31,17 @@ const CreateGroupModal = ({
             placeholder="เช่น เที่ยวเหนือ 2025"
             value={groupName}
             onChange={(e) => onNameChange(e.target.value)}
+            className="modal-input"
+          />
+
+          <label className="input-label">จำนวนสมาชิกสูงสุด</label>
+          <input
+            type="number"
+            min="2"
+            max="10"
+            placeholder="10"
+            value={maxMembers}
+            onChange={(e) => onMaxMembersChange(e.target.value)}
             className="modal-input"
           />
 
