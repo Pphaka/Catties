@@ -15,14 +15,30 @@ const Navbar = ({ searchTerm, setSearchTerm, brand = "MyBrand" }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [sparkles, setSparkles] = useState([]);
 
-  // Scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+  useEffect(() => {
+    // พยายามหา main-content ก่อน (สำหรับ Homepage)
+    const mainContent = document.querySelector('.main-content');
+    
+    const handleScroll = () => {
+      if (mainContent) {
+        // ถ้ามี main-content ให้ฟังจาก main-content
+        setIsScrolled(mainContent.scrollTop > 50);
+      } else {
+        // ถ้าไม่มี main-content ให้ฟังจาก window (หน้าอื่นๆ)
+        setIsScrolled(window.scrollY > 50);
+      }
+    };
+  
+    // ถ้ามี main-content ให้ฟังจาก main-content
+    if (mainContent) {
+      mainContent.addEventListener('scroll', handleScroll);
+      return () => mainContent.removeEventListener('scroll', handleScroll);
+    } else {
+      // ถ้าไม่มี main-content ให้ฟังจาก window
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   }, []);
 
   // Create sparkle effect

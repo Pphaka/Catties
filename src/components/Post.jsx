@@ -46,7 +46,7 @@ const initialPosts = [
   },
 ];
 
-const Post = ({ currentUser }) => {
+const Post = ({ currentUser, searchTerm = '' }) => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState(initialPosts);
   const [likedPosts, setLikedPosts] = useState(new Set());
@@ -76,25 +76,25 @@ const Post = ({ currentUser }) => {
       comments: [],
       isOwner: true,
       chatGroupId: String(Date.now()),
-      maxMembers: postData.maxMembers || 10,
-      currentMembers: 0,
+      maxMembers: Math.max(3, Math.min(postData.maxMembers || 3, 10)),  // ← 3-10
+      currentMembers: 1,
     };
     setPosts(prev => [newPost, ...prev]);
   };
-
+  
   const updatePost = (updatedData) => {
     setPosts(prevPosts =>
       prevPosts.map(p =>
         p.id === editingPost.id
-          ? { ...p, 
-            ...updatedData,
-            maxMembers: updatedData.maxMembers || p.maxMembers 
-          }
+          ? { 
+              ...p, 
+              ...updatedData,
+              maxMembers: Math.max(3, Math.min(updatedData.maxMembers || p.maxMembers, 10))
+            }
           : p
       )
     );
   };
-
   const deletePost = (id) => setPosts(prev => prev.filter(p => p.id !== id));
   
   const toggleLike = (id) => {
@@ -152,7 +152,7 @@ const Post = ({ currentUser }) => {
     
     // ตรวจสอบว่าเต็มหรือไม่
     if (post.currentMembers >= post.maxMembers) {
-      alert('ขอโทษครับ! กลุ่มนี้เต็มแล้ว (10/10 คน) 😢');
+      alert('ขอโทษด้วยกลุ่มนี้เต็มแล้ว (10/10 คน)');
       return;
     }
     
@@ -170,6 +170,18 @@ const Post = ({ currentUser }) => {
       console.error("ไม่พบ ID สำหรับแชทกลุ่มนี้!");
     }
   };
+
+  // Filter posts based on search term
+  const filteredPosts = posts.filter(post => {
+    if (!searchTerm) return true;
+    
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      post.title?.toLowerCase().includes(searchLower) ||
+      post.content?.toLowerCase().includes(searchLower) ||
+      post.author?.name?.toLowerCase().includes(searchLower)
+    );
+  });
   
   return (
     <div className="post-container">
@@ -178,25 +190,34 @@ const Post = ({ currentUser }) => {
       </button>
 
       <div className="post-list">
-        {posts.map(post => (
-          <PostCard
-            key={post.id}
-            post={post}
-            currentUser={currentUser}
-            likedPosts={likedPosts}
-            showComments={showComments}
-            commentInputs={commentInputs}
-            toggleLike={toggleLike}
-            toggleComments={toggleComments}
-            handleCommentInput={handleCommentInput}
-            addComment={addComment}
-            handleJoinChat={handleJoinChat}
-            showDropdown={showDropdown}
-            setShowDropdown={setShowDropdown}
-            handleOpenEditModal={handleOpenEditModal}
-            deletePost={deletePost}
-          />
-        ))}
+        {filteredPosts.length > 0 ? (
+          filteredPosts.map(post => (
+            <PostCard
+              key={post.id}
+              post={post}
+              currentUser={currentUser}
+              likedPosts={likedPosts}
+              showComments={showComments}
+              commentInputs={commentInputs}
+              toggleLike={toggleLike}
+              toggleComments={toggleComments}
+              handleCommentInput={handleCommentInput}
+              addComment={addComment}
+              handleJoinChat={handleJoinChat}
+              showDropdown={showDropdown}
+              setShowDropdown={setShowDropdown}
+              handleOpenEditModal={handleOpenEditModal}
+              deletePost={deletePost}
+            />
+          ))
+        ) : (
+          <div className="empty-state">
+            {searchTerm 
+              ? `ไม่พบโพสต์ที่ตรงกับการค้นหา "${searchTerm}"`
+              : 'ยังไม่มีโพสต์ กดปุ่ม + เพื่อสร้างโพสต์แรก'
+            }
+          </div>
+        )}
       </div>
       
       <Feb

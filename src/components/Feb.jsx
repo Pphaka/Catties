@@ -40,7 +40,7 @@ const Feb = ({ isOpen, onClose, onSubmit, post }) => {
         preview: URL.createObjectURL(file),
       }));
       // รวมรูปเก่ากับรูปใหม่ และจำกัดจำนวนรูปไม่ให้เกิน 4 รูป
-      setImages(prev => [...prev, ...newImages].slice(0, 4));
+      setImages(prev => [...prev, ...newImages].slice(0, 10));
     }
   };
 
@@ -51,7 +51,7 @@ const Feb = ({ isOpen, onClose, onSubmit, post }) => {
   const handleMaxMembersChange = (e) => {
     const value = parseInt(e.target.value);
     // จำกัดค่าระหว่าง 1-10 คน
-    if (value >= 1 && value <= 10) {
+    if (value >= 3 && value <= 10) {
       setMaxMembers(value);
     }
   };
@@ -127,7 +127,7 @@ const Feb = ({ isOpen, onClose, onSubmit, post }) => {
               +
             </button>
           </div>
-          <p className="max-members-hint">กำหนดได้ 1-10 คน</p>
+          <p className="max-members-hint">กำหนดได้ 3-10 คน</p>
         </div>
 
         {images.length > 0 && (

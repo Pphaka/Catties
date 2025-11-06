@@ -148,42 +148,167 @@
   white-space: pre-wrap;
 }
 
+/* แทนที่ส่วน Gallery ใน Post.css ของคุณด้วยโค้ดนี้ */
+
 /* ✨ ===============================
-   ✨ Gallery สำหรับแสดงหลายรูปภาพ - แก้ไขใหม่แบบ Facebook
+   ✨ Gallery สำหรับแสดงหลายรูปภาพ - แบบ Facebook
    ✨ =============================== */
-.post-image-gallery {
-  display: flex; /* เปลี่ยนจาก grid */
-  flex-direction: column; /* เรียงแนวตั้ง */
-  align-items: center; /* จัดกึ่งกลาง */
-  gap: 0; /* ไม่มีช่องว่าง */
-  background: #000; /* พื้นหลังดำ */
-  margin: 0 -1px; /* ยื่นออกจากขอบ card นิดหน่อย */
-}
-
-.post-image-gallery img {
-  width: 100%; /* เต็มความกว้าง */
-  height: auto; /* ความสูงปรับตามอัตราส่วน */
-  max-height: 600px; /* จำกัดความสูงสูงสุด */
-  object-fit: contain; /* แสดงรูปเต็มไม่ crop */
-  background: #000; /* พื้นหลังดำ */
-  display: block;
-}
-
-/* ลบ layout classes เดิม */
-.post-image-gallery.layout-1,
-.post-image-gallery.layout-2,
-.post-image-gallery.layout-3,
-.post-image-gallery.layout-4 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-height: none; /* ยกเลิกการจำกัดความสูง */
-  aspect-ratio: auto; /* ยกเลิก aspect ratio */
-}
-
-.post-image-gallery.layout-3 img:first-child {
-  grid-row: unset; /* ยกเลิก grid property */
-}
+   .post-image-gallery {
+    width: 100%;
+    margin: 0;
+    display: grid;
+    gap: 4px;
+    background: #000;
+    position: relative;
+  }
+  
+  /* 1 รูป - เต็มความกว้าง */
+  .post-image-gallery.images-1 {
+    grid-template-columns: 1fr;
+  }
+  
+  .post-image-gallery.images-1 img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+  }
+  
+  /* 2 รูป - แบ่ง 2 คอลัมน์เท่ากัน */
+  .post-image-gallery.images-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .post-image-gallery.images-2 img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+  
+  /* 3 รูป - 1 รูปใหญ่ซ้าย + 2 รูปเล็กขวาซ้อนกัน */
+  .post-image-gallery.images-3 {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  
+  .post-image-gallery.images-3 img:first-child {
+    grid-row: 1 / 3;
+    height: 100%;
+    min-height: 400px;
+    object-fit: cover;
+  }
+  
+  .post-image-gallery.images-3 img:nth-child(2),
+  .post-image-gallery.images-3 img:nth-child(3) {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  /* 4 รูป - Grid 2x2 */
+  .post-image-gallery.images-4 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  
+  .post-image-gallery.images-4 img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  /* 5+ รูป - แสดง 4 รูปแรก + overlay */
+  .post-image-gallery.images-5 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  
+  .post-image-gallery.images-5 img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  /* Overlay สำหรับรูปเกิน 4 */
+  .more-images-overlay {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: calc(50% - 2px);
+    height: calc(50% - 2px);
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .more-images-overlay:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  /* General Image Styles */
+  .post-image-gallery img {
+    display: block;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    background: #f0f0f0;
+  }
+  
+  .post-image-gallery img:hover {
+    opacity: 0.95;
+  }
+  
+  /* Responsive - Tablet */
+  @media (max-width: 768px) {
+    .post-image-gallery.images-2 img,
+    .post-image-gallery.images-4 img,
+    .post-image-gallery.images-5 img {
+      height: 200px;
+    }
+    
+    .post-image-gallery.images-3 {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    
+    .post-image-gallery.images-3 img:first-child {
+      grid-column: 1 / 3;
+      grid-row: 1;
+      height: 250px;
+      min-height: unset;
+    }
+    
+    .post-image-gallery.images-3 img:nth-child(2),
+    .post-image-gallery.images-3 img:nth-child(3) {
+      height: 150px;
+    }
+  }
+  
+  /* Responsive - Mobile */
+  @media (max-width: 480px) {
+    .post-image-gallery.images-1 img {
+      max-height: 300px;
+    }
+    
+    .post-image-gallery.images-2 img,
+    .post-image-gallery.images-3 img,
+    .post-image-gallery.images-4 img,
+    .post-image-gallery.images-5 img {
+      height: 150px;
+    }
+    
+    .post-image-gallery.images-3 img:first-child {
+      height: 200px;
+    }
+    
+    .more-images-overlay {
+      font-size: 28px;
+    }
+  }
 /* =============================== */
 
 /* ปุ่ม Actions */
@@ -243,7 +368,7 @@
   font-size: 16px;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, #0f4a79 0%, #215488 100%); 
+  background: linear-gradient(135deg, #2bbf6e 0%, #067132 100%); 
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -260,12 +385,9 @@
   transform: translateY(0);
   box-shadow: 0 2px 10px rgba(86, 141, 230, 0.3);
 }
-/* =============================== */
-
-
-/* ===============================
+/* 
    💬 โซนความคิดเห็น (Comments)
-=============================== */
+*/
 .comments-section {
   padding: 16px 20px;
   background: #fafafa;
@@ -390,9 +512,8 @@
 
 /* เพิ่มในส่วน Post.css */
 
-/* ✨ ===============================
-   ✨ แสดงจำนวนสมาชิก + สถานะเต็ม
-   ✨ =============================== */
+/* 
+   ✨ แสดงจำนวนสมาชิก + สถานะเต็ม*/
    .post-member-count {
     text-align: center;
     font-size: 15px;
@@ -476,5 +597,177 @@
     right: 20px;
     width: 56px;
     height: 56px;
+  }
+}
+
+/* ===============================
+   🖼️ Image Viewer Modal
+   เพิ่มส่วนนี้ท้ายไฟล์ Post.css
+=============================== */
+
+/* Overlay พื้นหลัง */
+.image-viewer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ปุ่มปิด */
+.viewer-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s;
+  z-index: 10001;
+}
+
+.viewer-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* ปุ่มนำทาง */
+.viewer-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s;
+  z-index: 10001;
+}
+
+.viewer-nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.viewer-prev {
+  left: 20px;
+}
+
+.viewer-next {
+  right: 20px;
+}
+
+/* Content Container */
+.viewer-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.viewer-content img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Counter (1/5) */
+.viewer-counter {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .viewer-nav {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .viewer-prev {
+    left: 10px;
+  }
+  
+  .viewer-next {
+    right: 10px;
+  }
+  
+  .viewer-close {
+    top: 10px;
+    right: 10px;
+    width: 45px;
+    height: 45px;
+  }
+  
+  .viewer-content img {
+    max-height: 80vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .viewer-nav {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .viewer-nav svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .viewer-close {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .viewer-close svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .viewer-counter {
+    font-size: 12px;
+    padding: 6px 12px;
   }
 }
