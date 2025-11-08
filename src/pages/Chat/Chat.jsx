@@ -108,6 +108,7 @@ const Chat = () => {
 
   const handleCreateGroup = () => {
     if (!newGroupName.trim()) return;
+    
     const newGroup = {
       id: String(Date.now()),
       name: newGroupName,
@@ -115,11 +116,13 @@ const Chat = () => {
       description: 'ยังไม่มีข้อความ',
       date: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' }),
       unread: 0,
-      maxMembers: parseInt(newGroupMaxMembers) || 10,
+      maxMembers: Math.max(3, Math.min(parseInt(newGroupMaxMembers) || 3, 10)), // 3-10 คน
       currentMembers: 1,
       members: [currentUser],
       messages: []
     };
+    
+    // ย้ายโค้ดข้างล่างนี้เข้ามาใน function
     setGroups(prev => [newGroup, ...prev]);
     setIsModalOpen(false);
     setNewGroupName('');

@@ -1,0 +1,672 @@
+/* PostCard.css */
+
+/* ===============================
+   📝 Post Card - ความสูงเท่ากัน
+=============================== */
+
+.post-card {
+  width: 100%;               /* ✅ ให้กว้างเต็มพื้นที่ container */
+  max-width: 700px;          /* ✅ กำหนดความกว้างสูงสุดเท่ากันทุกโพสต์ */
+  margin: 0 auto 1.5rem;     /* ✅ จัดให้อยู่กึ่งกลางและเว้นช่องว่างด้านล่าง */
+  
+  min-height: auto;          /* ✅ เปลี่ยนให้ปรับตามเนื้อหา */
+  max-height: none;          /* ✅ ไม่จำกัดความสูง */
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+.post-card {
+  text-align: left;
+}
+
+
+
+.post-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   📌 Header - ส่วนโปรไฟล์และวันที่
+=============================== */
+
+.post-header {
+  flex-shrink: 0;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  background: white;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar,
+.post-avatar-small {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0f2f5;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.author-info h3,
+.post-author-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.author-info p,
+.post-date {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #888;
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-btn:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  z-index: 60;
+  min-width: 160px;
+  overflow: hidden;
+  animation: fadeInDropdown 0.15s ease-out;
+}
+
+@keyframes fadeInDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+  color: #333;
+}
+
+.dropdown-item:hover {
+  background: #f8f8f8;
+}
+
+.dropdown-item.delete {
+  color: #e53e3e;
+}
+
+.dropdown-item.delete:hover {
+  background: #fff5f5;
+}
+
+/* ===============================
+   📄 Body - ส่วนเนื้อหาหลัก
+=============================== */
+
+.post-content {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  overflow-y: visible;       /* ✅ เปลี่ยนให้แสดงเต็ม */
+  overflow-x: hidden;
+}
+
+
+/* Title และ Description */
+.post-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  padding: 0;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.post-group {
+  font-size: 0.8rem;
+  color: #999;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.post-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #444;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0 0 1rem 0;
+}
+
+/* ===============================
+   🖼️ รูปภาพโพสต์ - ขนาดตามรูปจริง
+=============================== */
+
+.post-image-gallery {
+  width: 100%;
+  margin: 1rem 0;
+  display: grid;
+  gap: 4px;
+  background: #000;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  max-height: none;          /* ✅ ไม่จำกัดความสูง */
+}
+
+/* 1 รูป - แสดงเต็มตามสัดส่วน */
+.post-image-gallery.images-1 {
+  grid-template-columns: 1fr;
+}
+
+.post-image-gallery.images-1 img {
+  width: 100%;
+  height: auto;              /* ✅ ให้ปรับตามสัดส่วนรูป */
+  max-height: none;          /* ✅ ไม่จำกัดความสูง */
+  object-fit: contain;       /* ✅ แสดงรูปเต็มไม่ crop */
+}
+
+/* 2 รูป */
+.post-image-gallery.images-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.post-image-gallery.images-2 img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* 3 รูป */
+.post-image-gallery.images-3 {
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.post-image-gallery.images-3 img:first-child {
+  grid-row: 1 / 3;
+  height: 100%;
+  min-height: 400px;
+  object-fit: cover;
+}
+
+.post-image-gallery.images-3 img:nth-child(2),
+.post-image-gallery.images-3 img:nth-child(3) {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* 4+ รูป */
+.post-image-gallery.images-4,
+.post-image-gallery.images-5 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.post-image-gallery.images-4 img,
+.post-image-gallery.images-5 img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Overlay สำหรับรูปเกิน 4 */
+.more-images-overlay {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: calc(50% - 2px);
+  height: calc(50% - 2px);
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 0 0 12px 0;
+}
+
+.more-images-overlay:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.post-image-gallery img {
+  display: block;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  background: #f0f0f0;
+}
+
+.post-image-gallery img:hover {
+  opacity: 0.95;
+}
+
+/* Old style - สำหรับ backward compatibility */
+.post-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0;
+  max-height: 220px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.post-image-wrapper {
+  overflow: hidden;
+  border-radius: 8px;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: 100%;
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-image:hover {
+  transform: scale(1.05);
+}
+
+/* ===============================
+   👥 ข้อมูลสมาชิก
+=============================== */
+
+.post-member-count {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f4a79;
+  padding: 0.75rem;
+  background: #e3f2fd;
+  border-radius: 10px;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.post-member-count.full {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.member-info {
+  background: #f8f9fa;
+  padding: 0.875rem;
+  border-radius: 10px;
+  margin: 1rem 0 0 0;
+  font-size: 0.85rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ===============================
+   🎬 Footer - Actions & Buttons
+=============================== */
+
+.post-footer {
+  flex-shrink: 0;
+  background: #fafafa;
+}
+
+.post-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.action-btn,
+.post-action-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover,
+.post-action-link:hover {
+  background: #efefef;
+  color: #667eea;
+}
+
+.action-btn.liked,
+.post-action-link.liked {
+  color: #e74c3c;
+}
+
+.action-btn.liked:hover {
+  background: #ffe4ec;
+}
+
+/* Join Button */
+.post-join-section {
+  padding: 0.75rem 1.25rem 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.join-now-btn,
+.join-group-button {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.join-now-btn:hover,
+.join-group-button:hover {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.join-now-btn:active {
+  transform: translateY(0);
+}
+
+.join-now-btn:disabled {
+  background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ===============================
+   💬 Comments Section
+=============================== */
+
+.comments-section {
+  padding: 1rem 1.25rem;
+  background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.comments-section::-webkit-scrollbar {
+  width: 4px;
+}
+
+.comments-section::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 4px;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.comment,
+.comment-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #efefef;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.comment-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment strong {
+  color: #1a1a1a;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.comment p,
+.comment-text {
+  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #444;
+  margin: 0;
+}
+
+.comment-time {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* Comment Input */
+.comment-input-wrapper {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.comment-submit-btn,
+.send-comment-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.comment-submit-btn:hover,
+.send-comment-btn:hover {
+  background: #556ed6;
+  transform: scale(1.1);
+}
+
+.comment-submit-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===============================
+   📱 Responsive
+=============================== */
+
+@media (max-width: 768px) {
+  .post-card {
+    min-height: auto;
+    max-height: none;
+    border-radius: 12px;
+  }
+  
+  .post-content {
+    max-height: none;
+    overflow-y: visible;
+  }
+  
+  .post-image-gallery {
+    max-height: none;        /* ✅ ไม่จำกัด */
+  }
+  
+  .post-image-gallery.images-1 img {
+    max-height: none;        /* ✅ ไม่จำกัด */
+  }
+  
+  .post-image-gallery.images-2 img,
+  .post-image-gallery.images-3 img,
+  .post-image-gallery.images-4 img,
+  .post-image-gallery.images-5 img {
+    height: 150px;
+  }
+  
+  .post-image-gallery.images-3 img:first-child {
+    min-height: 300px;
+  }
+  
+  .post-title {
+    font-size: 1.1rem;
+  }
+  
+  .post-description {
+    font-size: 0.9rem;
+  }
+  
+  .post-actions {
+    gap: 0.5rem;
+  }
+  
+  .action-btn,
+  .post-action-link {
+    font-size: 0.85rem;
+    padding: 0.625rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-card {
+    margin-bottom: 1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .post-header,
+  .post-content,
+  .post-footer {
+    padding: 0.875rem;
+  }
+  
+  .post-image-gallery {
+    max-height: none;        /* ✅ ไม่จำกัด */
+    border-radius: 8px;
+  }
+  
+  .post-image-gallery.images-1 img {
+    max-height: none;        /* ✅ ไม่จำกัด */
+  }
+  
+  .post-actions {
+    padding: 0.625rem 0.875rem;
+  }
+  
+  .post-join-section {
+    padding: 0.625rem 0.875rem 0.875rem;
+  }
+  
+  .more-images-overlay {
+    font-size: 24px;
+  }
+}

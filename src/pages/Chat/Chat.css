@@ -2,7 +2,7 @@
   font-family: sans-serif;
   min-height: 100vh;
   background: #ffffff;
-  padding-top: 350px;
+  padding-top: 150px;
 }
 
 /* ---------- Layout ---------- */
@@ -106,9 +106,11 @@
   gap: 20px;
 }
 
+/* สีฟ้าสำหรับข้อความที่ยังไม่อ่าน */
 .group-card.unread {
-  background: linear-gradient(to right, #e3f2fd 0%, #fff 100%);
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
   border-left: 4px solid #1976d2;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
 }
 
 .group-card:hover {
@@ -155,7 +157,9 @@
 }
 
 /* ---------- Group Info ---------- */
-.group-info { flex: 1; }
+.group-info { 
+  flex: 1; 
+}
 
 .group-name {
   font-size: 24px;
@@ -164,7 +168,11 @@
   margin: 0 0 8px 0;
 }
 
-.group-name.unread { color: #1976d2; }
+/* ชื่อกลุ่มสีน้ำเงินเข้มเมื่อยังไม่อ่าน */
+.group-name.unread { 
+  color: #0d47a1;
+  font-weight: 800;
+}
 
 .group-description {
   color: #666;
@@ -172,14 +180,21 @@
   margin: 0 0 4px 0;
 }
 
+/* ข้อความสีเข้มและตัวหนาเมื่อยังไม่อ่าน */
 .group-description.unread {
-  color: #333;
-  font-weight: 500;
+  color: #1565c0;
+  font-weight: 600;
 }
 
 .group-date {
   color: #999;
   font-size: 13px;
+}
+
+/* วันที่สีน้ำเงินเมื่อยังไม่อ่าน */
+.group-date.unread {
+  color: #1976d2;
+  font-weight: 600;
 }
 
 /* ---------- Chat Button ---------- */
@@ -200,6 +215,20 @@
   background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
   transform: scale(1.05);
   box-shadow: 0 6px 16px rgba(100, 181, 246, 0.4);
+}
+
+/* Disabled chat button */
+.chat-btn:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: #999;
+}
+
+.chat-btn:disabled:hover {
+  background: #e0e0e0;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* ---------- Empty State ---------- */
@@ -262,60 +291,17 @@
   margin-bottom: 16px;
 }
 
-.avatar-upload {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* Modal input for number */
+.modal-input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-.avatar-preview {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 1px solid #ddd;
-}
-
-.upload-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  background: #f0f0f0;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  gap: 10px;
-  width: 45%;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background: #fcf5f5;
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.create-btn {
-  background: #4caf50;
-  color: white;
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.create-btn:disabled {
-  background: #a5d6a7;
-  cursor: not-allowed;
+.modal-input[type="number"]::-webkit-outer-spin-button,
+.modal-input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .close-btn {
@@ -324,8 +310,7 @@
   cursor: pointer;
 }
 
-
-/*Avatar Upload  */
+/* Avatar Upload */
 .avatar-upload {
   display: flex;
   flex-direction: column;
@@ -367,9 +352,13 @@
   font-weight: 600;
 }
 
-.upload-btn:hover { background: #e3f2fd; }
+.upload-btn:hover { 
+  background: #e3f2fd; 
+}
 
-.file-input { display: none; }
+.file-input { 
+  display: none; 
+}
 
 .modal-actions {
   display: flex;
@@ -377,44 +366,57 @@
   margin-top: 2rem;
 }
 
-.cancel-btn, .submit-btn {
+.modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.cancel-btn, .create-btn {
   flex: 1;
-  padding: 0.75rem;
-  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.25s ease;
 }
 
+/* ปุ่มยกเลิก */
 .cancel-btn {
-  border: 2px solid #ddd;
-  background: white;
-  color: #666;
+  border: 1.5px solid #ccc;
+  background: #fafafa;
+  color: #555;
 }
 
 .cancel-btn:hover {
-  background: #f5f5f5;
+  background: #f0f0f0;
   border-color: #bbb;
+  color: #333;
 }
 
-.submit-btn {
+/* ปุ่มสร้างกลุ่ม */
+.create-btn {
   border: none;
-  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  background: linear-gradient(135deg, #2196f3, #1976d2);
   color: white;
+  box-shadow: 0 3px 6px rgba(25, 118, 210, 0.3);
 }
 
-.submit-btn:hover:not(:disabled) {
+.create-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+  box-shadow: 0 5px 14px rgba(25, 118, 210, 0.4);
 }
 
-.submit-btn:disabled {
-  opacity: 0.6;
+.create-btn:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-/* หน้าChat Conversation  */
+
+/* ---------- Chat Conversation ---------- */
 .chat-container {
   display: flex;
   flex-direction: column;
@@ -457,7 +459,66 @@
   font-size: 0.9rem;
 }
 
-/*  Message List */
+/* Chat Options */
+.chat-options {
+  position: relative;
+  margin-left: auto;
+}
+
+.chat-options button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.chat-options button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.options-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.options-dropdown button {
+  padding: 10px 16px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.options-dropdown button:hover {
+  background-color: #f7f7f7;
+}
+
+.end-trip-btn {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+/* Message List */
 .messages-container {
   flex: 1;
   padding: 16px;
@@ -501,7 +562,7 @@
   opacity: 0.7;
 }
 
-/*  Input  */
+/* Input Container */
 .input-container {
   display: flex;
   align-items: center;
@@ -561,74 +622,6 @@
   background: #e3f2fd;
 }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-  .content-wrapper { padding: 20px 15px; }
-  .page-title { font-size: 28px; }
-  .group-card { flex-direction: column; text-align: center; }
-  .group-avatar { width: 80px; height: 80px; }
-  .create-group-btn { padding: 10px 16px; font-size: 14px; }
-  .modal-overlay { padding: 1rem; }
-  .modal-content { padding: 1.5rem; }
-}
-.chat-options {
-  position: relative;
-  margin-left: auto;
-}
-
-.chat-options button {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-
-.chat-options button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.options-dropdown {
-  position: absolute;
-  top: 120%;
-  right: 0;
-  min-width: 160px; /* กว้างพอเหมาะ */
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  overflow: hidden;
-  animation: fadeIn 0.15s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.options-dropdown button {
-  padding: 10px 16px;
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: background 0.2s;
-}
-
-.options-dropdown button:hover {
-  background-color: #f7f7f7;
-}
-
-.end-trip-btn {
-  color: #d32f2f;
-  font-weight: 600;
-}
-
 /* Member count styles */
 .member-count {
   font-size: 12px;
@@ -647,31 +640,6 @@
   font-size: 13px;
   color: #888;
   font-weight: 500;
-}
-
-/* Group card when full */
-.group-card.full {
-  border: 2px solid #ff9800;
-  background: #fff8e1;
-}
-
-.group-card.full .member-count {
-  color: #ff6f00;
-  font-weight: 700;
-}
-
-/* Disabled chat button */
-.chat-btn:disabled {
-  background: #e0e0e0;
-  cursor: not-allowed;
-  opacity: 0.6;
-  color: #999;
-}
-
-.chat-btn:disabled:hover {
-  background: #e0e0e0;
-  transform: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* Post join section (for Post.jsx) */
@@ -704,15 +672,36 @@
   box-shadow: none;
 }
 
-/* Modal input for number */
-.modal-input[type="number"] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
-.modal-input[type="number"]::-webkit-outer-spin-button,
-.modal-input[type="number"]::-webkit-inner-spin-button {
-  appearance: none;
-  -webkit-appearance: none;
-  margin: 0;
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .content-wrapper { 
+    padding: 20px 15px; 
+  }
+  
+  .page-title { 
+    font-size: 28px; 
+  }
+  
+  .group-card { 
+    flex-direction: column; 
+    text-align: center; 
+  }
+  
+  .group-avatar { 
+    width: 80px; 
+    height: 80px; 
+  }
+  
+  .create-group-btn { 
+    padding: 10px 16px; 
+    font-size: 14px; 
+  }
+  
+  .modal-overlay { 
+    padding: 1rem; 
+  }
+  
+  .modal-content { 
+    padding: 1.5rem; 
+  }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, MessageCircle, MapPin, User, Search } from 'lucide-react';
+import { Home, MessageCircle, MapPin, User } from 'lucide-react';
 import './Navbar.css';
 
 const navItems = [
@@ -10,38 +10,30 @@ const navItems = [
   { id: 'profile', label: 'Profile', icon: User, path: '/profile', tooltip: 'โปรไฟล์' }
 ];
 
-const Navbar = ({ searchTerm, setSearchTerm, brand = "MyBrand" }) => {
+const Navbar = ({ brand = "TripTogether" }) => {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [sparkles, setSparkles] = useState([]);
 
-
   useEffect(() => {
-    // พยายามหา main-content ก่อน (สำหรับ Homepage)
     const mainContent = document.querySelector('.main-content');
-    
     const handleScroll = () => {
       if (mainContent) {
-        // ถ้ามี main-content ให้ฟังจาก main-content
         setIsScrolled(mainContent.scrollTop > 50);
       } else {
-        // ถ้าไม่มี main-content ให้ฟังจาก window (หน้าอื่นๆ)
         setIsScrolled(window.scrollY > 50);
       }
     };
-  
-    // ถ้ามี main-content ให้ฟังจาก main-content
+
     if (mainContent) {
       mainContent.addEventListener('scroll', handleScroll);
       return () => mainContent.removeEventListener('scroll', handleScroll);
     } else {
-      // ถ้าไม่มี main-content ให้ฟังจาก window
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
     }
   }, []);
 
-  // Create sparkle effect
   const createSparkle = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const newSparkles = Array.from({ length: 3 }, (_, i) => ({
@@ -50,9 +42,7 @@ const Navbar = ({ searchTerm, setSearchTerm, brand = "MyBrand" }) => {
       y: Math.random() * rect.height,
       delay: i * 0.2
     }));
-
     setSparkles(prev => [...prev, ...newSparkles]);
-
     setTimeout(() => {
       setSparkles(prev => prev.filter(s => !newSparkles.find(ns => ns.id === s.id)));
     }, 1000);
@@ -61,8 +51,9 @@ const Navbar = ({ searchTerm, setSearchTerm, brand = "MyBrand" }) => {
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
-        {/* Brand/Logo */}
-        <h1 
+        {/* Brand/Logo - ✅ เปลี่ยนเป็น Link */}
+        <Link 
+          to="/homepage"
           className="brand"
           onMouseEnter={createSparkle}
         >
@@ -80,39 +71,22 @@ const Navbar = ({ searchTerm, setSearchTerm, brand = "MyBrand" }) => {
               ✨
             </span>
           ))}
-        </h1>
-
-        {/* Search Bar */}
-        <div className="search-container">
-          <Search className="search-icon" size={16} />
-          <input
-            type="text"
-            className="search-input"
-            placeholder="ค้นหา..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        </Link>
 
         {/* Navigation Items */}
         <div className="nav-items">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
-            
             return (
               <Link
                 key={item.id}
                 to={item.path}
                 className={`nav-button ${isActive ? 'active' : 'inactive'}`}
-
               >
-                {/* Icon */}
                 <span className="nav-icon">
                   <Icon size={20} />
                 </span>
-
-                {/* Label */}
                 <span className="nav-label">{item.label}</span>
               </Link>
             );

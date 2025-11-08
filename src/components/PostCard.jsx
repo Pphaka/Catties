@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Heart, MessageCircle, MoreVertical, Edit, Trash2, Send, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import './Post.css';
+import './PostCard.css';
 
 const PostCard = ({
   post,

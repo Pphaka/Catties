@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, MessageCircle, Edit2, X, Check, Plus } from 'lucide-react';
+import { Camera, Edit2, X, Check, Plus } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import Feb from '../components/Feb';
-import PostCard from '../components/PostCard';
+import Post from '../components/Post';  
+import Feb from '../components/Feb'; // ✅ เพิ่ม import Feb กลับมา
 import './ProfilePage.css';
 
 const ProfilePage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
   const [profileData, setProfileData] = useState({
@@ -20,119 +19,6 @@ const ProfilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
 
-  // ✨ โพสต์ในหน้าโปรไฟล์
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      author: {
-        name: 'Karen',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
-      },
-      timestamp: '9 พฤษภาคม 2025',
-      title: 'Chiang Mai',
-      content: '🌸 Chiang Mai Escape – ทริปโรจันติบเมืองเหนือ 🌺\n🗓 10–13 ธันวาคม 2025',
-      images: ['https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&h=400&fit=crop'],
-      likes: 12,
-      comments: [],
-      isOwner: true,
-      chatGroupId: '1'
-    }
-  ]);
-
-  // ✨ ฟังก์ชันจัดการโพสต์ (เหมือนใน Post.jsx)
-  const [likedPosts, setLikedPosts] = useState(new Set());
-  const [showComments, setShowComments] = useState(new Set());
-  const [showDropdown, setShowDropdown] = useState(null);
-  const [commentInputs, setCommentInputs] = useState({});
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowDropdown(null);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const toggleLike = (id) => {
-    setPosts(prev =>
-      prev.map(p =>
-        p.id === id
-          ? { ...p, likes: likedPosts.has(id) ? p.likes - 1 : p.likes + 1 }
-          : p
-      )
-    );
-    setLikedPosts(prev => {
-      const newSet = new Set(prev);
-      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
-      return newSet;
-    });
-  };
-
-  const toggleComments = (id) => {
-    setShowComments(prev => {
-      const newSet = new Set(prev);
-      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
-      return newSet;
-    });
-  };
-
-  const handleCommentInput = (id, value) => {
-    setCommentInputs(prev => ({ ...prev, [id]: value }));
-  };
-
-  const addComment = (id) => {
-    const text = commentInputs[id];
-    if (!text?.trim()) return;
-
-    setPosts(prev => prev.map(p =>
-      p.id === id ? {
-        ...p,
-        comments: [...(p.comments || []), {
-          author: profileData.name,
-          text,
-          timestamp: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
-        }]
-      } : p
-    ));
-
-    setCommentInputs(prev => ({ ...prev, [id]: '' }));
-  };
-
-  const handleJoinChat = (chatId) => {
-    console.log('เข้าร่วมกลุ่มแชท:', chatId);
-  };
-
-  const deletePost = (id) => setPosts(prev => prev.filter(p => p.id !== id));
-
-  const handleOpenEditModal = (post) => {
-    setEditingPost(post);
-    setIsModalOpen(true);
-  };
-
-  const handleCreatePost = (postData) => {
-    const newPost = {
-      ...postData,
-      id: Date.now(),
-      author: { name: profileData.name, avatar: profileData.avatar },
-      timestamp: new Date().toLocaleString('th-TH'),
-      likes: 0,
-      comments: [],
-      isOwner: true,
-      chatGroupId: '1'
-    };
-    setPosts(prev => [newPost, ...prev]);
-  };
-
-  const handleUpdatePost = (updatedData) => {
-    setPosts(prev =>
-      prev.map(p => p.id === editingPost.id ? { ...p, ...updatedData } : p)
-    );
-  };
-
-  // ✨ ส่วนโปรไฟล์
   const handleEdit = () => {
     setIsEditing(true);
     setEditForm({ ...profileData });
@@ -173,7 +59,7 @@ const ProfilePage = () => {
   ];
 
   const reviews = {
-    average: 4.5,
+    average: 4.6,
     total: 128,
     breakdown: [
       { stars: 5, count: 90 },
@@ -201,10 +87,9 @@ const ProfilePage = () => {
 
   return (
     <div className="head">
-      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} brand="TripTogether" />
+      <Navbar brand="TripTogether" />
       <div className="hero-section" style={{ background: profileData.coverColor }}></div>
 
-      {/* Edit Profile Modal */}
       {isEditing && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -221,7 +106,7 @@ const ProfilePage = () => {
                 <div className="profile-avatar-preview">
                   <img src={editForm.avatar} alt="Profile" className="avatar-img" />
                 </div>
-                <label className="image-upload-label primary-btn-style">
+                <label className="image-upload-label">
                   <Camera size={16} />
                   เลือกรูปภาพ
                   <input type="file" accept="image/*" onChange={handleProfileImageUpload} style={{ display: 'none' }} />
@@ -278,7 +163,6 @@ const ProfilePage = () => {
       )}
 
       <div className="content-wrapper">
-        {/* Profile Card */}
         <div className="profile-card">
           <div className="profile-card-content">
             <div className="avatar-section">
@@ -305,35 +189,20 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Content Grid */}
         <div className="content-grid">
-          {/* Left Column - Posts */}
           <div>
             <div className="content-box">
               <h3 className="section-title">Post</h3>
-              {posts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  currentUser={{ name: profileData.name, avatar: profileData.avatar }}
-                  likedPosts={likedPosts}
-                  showComments={showComments}
-                  commentInputs={commentInputs}
-                  toggleLike={toggleLike}
-                  toggleComments={toggleComments}
-                  handleCommentInput={handleCommentInput}
-                  addComment={addComment}
-                  handleJoinChat={handleJoinChat}
-                  showDropdown={showDropdown}
-                  setShowDropdown={setShowDropdown}
-                  handleOpenEditModal={handleOpenEditModal}
-                  deletePost={deletePost}
-                />
-              ))}
+              {/* ✅ ใช้ Post component แทน PostCard */}
+                <Post 
+                    currentUser={{ name: profileData.name, avatar: profileData.avatar }}
+                    searchTerm=""
+                    filterByOwner={true}  // ✅ เพิ่ม
+                    ownerId={profileData.name}  // ✅ เพิ่ม
+              />
             </div>
           </div>
 
-          {/* Right Column - Review & Comments */}
           <div className="right-column-container">
             <div className="content-box">
               <h3 className="section-title">Review</h3>
@@ -361,7 +230,7 @@ const ProfilePage = () => {
             </div>
 
             <div className="content-box">
-              <h3 className="section-title comment-section-title">Comment 💬</h3>
+              <h3 className="section-title">Comment 💬</h3>
               <div className="comment-list">
                 {comments.map((comment) => (
                   <div key={comment.id} className="comment-item">
@@ -376,18 +245,6 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-
-      {/* Floating Button */}
-      <button className="fab" onClick={() => { setEditingPost(null); setIsModalOpen(true); }}>
-        <Plus size={28} />
-      </button>
-
-      <Feb
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={editingPost ? handleUpdatePost : handleCreatePost}
-        post={editingPost}
-      />
     </div>
   );
 };
