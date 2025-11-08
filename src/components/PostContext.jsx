@@ -37,7 +37,7 @@ export const PostProvider = ({ children }) => {
       isOwner: true,
       chatGroupId: '2',
       maxMembers: 10,
-      currentMembers: 3,
+      currentMembers: 10,
     },
   ]);
 

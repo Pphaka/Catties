@@ -635,41 +635,11 @@
   font-weight: 600;
 }
 
-/* Chat header member info */
 .member-info {
-  font-size: 13px;
-  color: #888;
-  font-weight: 500;
-}
-
-/* Post join section (for Post.jsx) */
-.post-member-count {
-  text-align: center;
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 8px;
-  font-weight: 600;
-  padding: 8px;
-  background: #f5f5f5;
-  border-radius: 8px;
-}
-
-.post-member-count.full {
-  background: #ffebee;
-  color: #d32f2f;
-}
-
-/* Join button disabled state */
-.join-now-btn:disabled {
-  background: linear-gradient(135deg, #bdbdbd 0%, #9e9e9e 100%);
-  cursor: not-allowed;
-  opacity: 0.6;
-  box-shadow: none;
-}
-
-.join-now-btn:disabled:hover {
-  transform: none;
-  box-shadow: none;
+  background: transparent !important; /* ลบพื้นหลังสีขาว */
+  border: none !important;            /* เผื่อมีเส้นขอบ */
+  box-shadow: none !important;        /* เผื่อมีเงา */
+  padding: 4px 8px;                   /* คงระยะห่างไว้ */
 }
 
 /* ---------- Responsive ---------- */
