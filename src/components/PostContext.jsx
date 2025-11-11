@@ -20,8 +20,9 @@ export const PostProvider = ({ children }) => {
       chatGroupId: '1',
       maxMembers: 10,
       currentMembers: 7,
+      joinRequests: [], // ✅ เพิ่ม
+      members: [], // ✅ เพิ่ม
     },
-    // ✅ เพิ่มโพสต์ของ Karen
     {
       id: 102,
       author: {
@@ -37,7 +38,9 @@ export const PostProvider = ({ children }) => {
       isOwner: true,
       chatGroupId: '2',
       maxMembers: 10,
-      currentMembers: 10,
+      currentMembers: 1, // ✅ แก้จาก 10 เป็น 1 (เพื่อให้ทดสอบได้)
+      joinRequests: [], // ✅ เพิ่ม
+      members: [], // ✅ เพิ่ม
     },
   ]);
 
@@ -53,8 +56,79 @@ export const PostProvider = ({ children }) => {
     setPosts(prev => prev.filter(p => p.id !== id));
   };
 
+  // ✅ เพิ่มฟังก์ชันส่ง request
+  const sendJoinRequest = (postId, user) => {
+    setPosts(prev => prev.map(p => {
+      if (p.id === postId) {
+        const alreadyRequested = p.joinRequests?.some(r => r.userName === user.name);
+        const alreadyMember = p.members?.some(m => m.userName === user.name);
+        const isAuthor = p.author.name === user.name;
+        
+        if (alreadyRequested || alreadyMember || isAuthor) {
+          return p;
+        }
+
+        return {
+          ...p,
+          joinRequests: [
+            ...(p.joinRequests || []),
+            {
+              userId: Date.now(),
+              userName: user.name,
+              userAvatar: user.avatar,
+              timestamp: new Date().toLocaleString('th-TH'),
+            }
+          ]
+        };
+      }
+      return p;
+    }));
+  };
+
+  // ✅ เพิ่มฟังก์ชันอนุมัติ
+  const approveJoinRequest = (postId, userName) => {
+    setPosts(prev => prev.map(p => {
+      if (p.id === postId) {
+        const request = p.joinRequests?.find(r => r.userName === userName);
+        if (!request) return p;
+
+        return {
+          ...p,
+          joinRequests: p.joinRequests.filter(r => r.userName !== userName),
+          members: [
+            ...(p.members || []),
+            request
+          ],
+          currentMembers: (p.currentMembers || 0) + 1
+        };
+      }
+      return p;
+    }));
+  };
+
+  // ✅ เพิ่มฟังก์ชันปฏิเสธ
+  const rejectJoinRequest = (postId, userName) => {
+    setPosts(prev => prev.map(p => {
+      if (p.id === postId) {
+        return {
+          ...p,
+          joinRequests: (p.joinRequests || []).filter(r => r.userName !== userName)
+        };
+      }
+      return p;
+    }));
+  };
+
   return (
-    <PostContext.Provider value={{ posts, addPost, updatePost, deletePost }}>
+    <PostContext.Provider value={{ 
+      posts, 
+      addPost, 
+      updatePost, 
+      deletePost,
+      sendJoinRequest, // ✅ เพิ่ม
+      approveJoinRequest, // ✅ เพิ่ม
+      rejectJoinRequest // ✅ เพิ่ม
+    }}>
       {children}
     </PostContext.Provider>
   );

@@ -12,9 +12,7 @@
   gap: 20px;
 }
 
-/* ===============================
-   ⚪️ ปุ่มลอย (FAB)
-=============================== */
+/* ปุ่มลอย (FAB)*/
 .post-fab {
   position: fixed;
   bottom: 32px;
@@ -43,7 +41,6 @@
   transform: scale(1.05) rotate(90deg);
 }
 
-/*🖼️ Image Viewer Modal*/
 
 /* Overlay พื้นหลัง */
 .image-viewer-overlay {
@@ -157,9 +154,7 @@
   font-weight: 500;
 }
 
-/* ===============================
-   📱 Responsive Design
-=============================== */
+/*Responsive Design*/
 @media (max-width: 640px) {
   .post-container {
     padding: 0;

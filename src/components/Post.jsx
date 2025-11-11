@@ -2,13 +2,24 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { usePosts } from './PostContext'; 
+import { useNotifications } from "./NotificationContext";
 import Feb from './Feb';
 import PostCard from './PostCard';
 import './Post.css';
 
-const Post = ({ currentUser, searchTerm = '', filterByOwner = false, ownerId = null }) => { // ✅ เพิ่ม props
+const Post = ({ currentUser, searchTerm = '', filterByOwner = false, ownerId = null }) => {
   const navigate = useNavigate();
-  const { posts, addPost, updatePost: updatePostContext, deletePost: deletePostContext } = usePosts(); // ✅ ใช้ Context
+  const { 
+    posts, 
+    addPost, 
+    updatePost: updatePostContext, 
+    deletePost: deletePostContext,
+    sendJoinRequest,
+    approveJoinRequest,
+    rejectJoinRequest
+  } = usePosts();
+  
+  const { addNotification } = useNotifications();
   
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [showComments, setShowComments] = useState(new Set());
@@ -39,8 +50,10 @@ const Post = ({ currentUser, searchTerm = '', filterByOwner = false, ownerId = n
       chatGroupId: String(Date.now()),
       maxMembers: Math.max(3, Math.min(postData.maxMembers || 3, 10)),
       currentMembers: 1,
+      joinRequests: [],
+      members: [],
     };
-    addPost(newPost); // ✅ ใช้ function จาก Context
+    addPost(newPost);
   };
   
   const updatePost = (updatedData) => {
@@ -48,21 +61,36 @@ const Post = ({ currentUser, searchTerm = '', filterByOwner = false, ownerId = n
       updatePostContext(editingPost.id, {
         ...updatedData,
         maxMembers: Math.max(3, Math.min(updatedData.maxMembers || editingPost.maxMembers, 10))
-      }); // ✅ ใช้ function จาก Context
+      });
     }
   };
   
   const deletePost = (id) => {
-    deletePostContext(id); // ✅ ใช้ function จาก Context
+    deletePostContext(id);
   };
   
   const toggleLike = (id) => {
     const post = posts.find(p => p.id === id);
     if (post) {
+      const isLiking = !likedPosts.has(id);
+      
       updatePostContext(id, {
-        likes: likedPosts.has(id) ? post.likes - 1 : post.likes + 1
+        likes: isLiking ? post.likes + 1 : post.likes - 1
       });
+
+      if (isLiking && post.author.name !== currentUser.name) {
+        addNotification({
+          type: 'like',
+          postId: post.id,
+          postTitle: post.title,
+          from: currentUser.name,
+          fromAvatar: currentUser.avatar,
+          to: post.author.name,
+          message: `${currentUser.name} ถูกใจโพสต์ "${post.title}" ของคุณ`
+        });
+      }
     }
+    
     setLikedPosts(prev => {
       const newSet = new Set(prev);
       newSet.has(id) ? newSet.delete(id) : newSet.add(id);
@@ -84,16 +112,30 @@ const Post = ({ currentUser, searchTerm = '', filterByOwner = false, ownerId = n
     
     const post = posts.find(p => p.id === id);
     if (post) {
+      const newComment = {
+        author: currentUser.name,
+        text,
+        timestamp: new Date().toLocaleString('th-TH', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      };
+
       updatePostContext(id, {
-        comments: [...post.comments, {
-          author: currentUser.name,
-          text,
-          timestamp: new Date().toLocaleString('th-TH', {
-            hour: '2-digit',
-            minute: '2-digit'
-          })
-        }]
+        comments: [...post.comments, newComment]
       });
+
+      if (post.author.name !== currentUser.name) {
+        addNotification({
+          type: 'comment',
+          postId: post.id,
+          postTitle: post.title,
+          from: currentUser.name,
+          fromAvatar: currentUser.avatar,
+          to: post.author.name,
+          message: `${currentUser.name} แสดงความคิดเห็นในโพสต์ "${post.title}": "${text.substring(0, 30)}${text.length > 30 ? '...' : ''}"`
+        });
+      }
     }
     
     setCommentInputs(prev => ({ ...prev, [id]: '' }));
@@ -112,26 +154,47 @@ const Post = ({ currentUser, searchTerm = '', filterByOwner = false, ownerId = n
       alert('ขอโทษด้วยกลุ่มนี้เต็มแล้ว');
       return;
     }
-    
-    updatePostContext(postId, {
-      currentMembers: post.currentMembers + 1
-    });
-    
-    if (chatId) {
-      navigate(`/chat/${chatId}`);
-    } else {
-      console.error("ไม่พบ ID สำหรับแชทกลุ่มนี้!");
+
+    if (post.author.name === currentUser.name) {
+      alert('คุณเป็นผู้สร้างทริปนี้อยู่แล้ว');
+      return;
     }
+
+    const alreadyRequested = post.joinRequests?.some(r => r.userName === currentUser.name);
+    const alreadyMember = post.members?.some(m => m.userName === currentUser.name);
+
+    if (alreadyRequested) {
+      alert('คุณได้ส่งคำขอเข้าร่วมแล้ว กรุณารอการอนุมัติ ⏳');
+      return;
+    }
+
+    if (alreadyMember) {
+      if (chatId) {
+        navigate(`/chat/${chatId}`); // ✅ แก้ไข: เพิ่มวงเล็บ ()
+      }
+      return;
+    }
+
+    sendJoinRequest(postId, currentUser);
+
+    addNotification({
+      type: 'join_request',
+      postId: post.id,
+      postTitle: post.title,
+      from: currentUser.name,
+      fromAvatar: currentUser.avatar,
+      to: post.author.name,
+      message: `${currentUser.name} ขอเข้าร่วมทริป "${post.title}"`
+    });
+
+    alert('ส่งคำขอเข้าร่วมกลุ่มเรียบร้อย! 🎉');
   };
 
-  // ✅ Filter posts based on search term and owner
   const filteredPosts = posts.filter(post => {
-    // ถ้าอยู่ที่หน้า Profile → แสดงเฉพาะโพสต์ของเจ้าของ
     if (filterByOwner && post.author.name !== ownerId) {
       return false;
     }
 
-    // ถ้ามีการค้นหา → filter ตาม searchTerm
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       return (
@@ -169,6 +232,8 @@ const Post = ({ currentUser, searchTerm = '', filterByOwner = false, ownerId = n
               setShowDropdown={setShowDropdown}
               handleOpenEditModal={handleOpenEditModal}
               deletePost={deletePost}
+              approveJoinRequest={approveJoinRequest}
+              rejectJoinRequest={rejectJoinRequest}
             />
           ))
         ) : (

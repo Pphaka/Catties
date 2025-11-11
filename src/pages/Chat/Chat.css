@@ -168,7 +168,6 @@
   margin: 0 0 8px 0;
 }
 
-/* ชื่อกลุ่มสีน้ำเงินเข้มเมื่อยังไม่อ่าน */
 .group-name.unread { 
   color: #0d47a1;
   font-weight: 800;
@@ -180,7 +179,7 @@
   margin: 0 0 4px 0;
 }
 
-/* ข้อความสีเข้มและตัวหนาเมื่อยังไม่อ่าน */
+
 .group-description.unread {
   color: #1565c0;
   font-weight: 600;
@@ -191,7 +190,6 @@
   font-size: 13px;
 }
 
-/* วันที่สีน้ำเงินเมื่อยังไม่อ่าน */
 .group-date.unread {
   color: #1976d2;
   font-weight: 600;

@@ -37,7 +37,7 @@ const Chat = () => {
       date: '1 May 2025',
       unread: 3,
       maxMembers: 10,
-      currentMembers: 10, // ✅ แก้เป็น 8 ให้ตรงกับจำนวน members
+      currentMembers: 10,
       members: ['Doughnut', 'Alex', 'Sarah', 'John', 'Mike', 'Lisa', 'Tom', 'คุณ','Tan','Tristan'],
       messages: [
         { id: 1, sender: 'Doughnut', text: 'สวัสดีค่ะทุกคน!', time: '10:30', isOwn: false },
@@ -116,7 +116,7 @@ const Chat = () => {
       description: 'ยังไม่มีข้อความ',
       date: new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' }),
       unread: 0,
-      maxMembers: Math.max(3, Math.min(parseInt(newGroupMaxMembers) || 3, 10)), // 3-10 คน
+      maxMembers: Math.max(3, Math.min(parseInt(newGroupMaxMembers) || 3, 10)), 
       currentMembers: 1,
       members: [currentUser],
       messages: []
@@ -131,7 +131,7 @@ const Chat = () => {
     setAvatarPreview(null);
   };
 
-  // ✅ แก้ไข handleChatClick ให้กระชับขึ้น
+  // แก้ไข handleChatClick ให้กระชับขึ้น
   const handleChatClick = (clickedGroupId) => {
     // ดึงข้อมูลกลุ่มล่าสุดจาก state
     const currentGroups = groups;
@@ -142,7 +142,7 @@ const Chat = () => {
     const isAlreadyMember = group.members.includes(currentUser);
     const isFull = group.currentMembers >= group.maxMembers;
   
-    // ✅ ถ้าเป็นสมาชิกอยู่แล้ว → เปิดแชทได้เลย (ไม่สนใจว่าเต็มหรือไม่)
+    // ถ้าเป็นสมาชิกอยู่แล้ว → เปิดแชทได้เลย (ไม่สนใจว่าเต็มหรือไม่)
     if (isAlreadyMember) {
       setActiveChat(group);
       setIsTripEnded(false);
@@ -151,10 +151,10 @@ const Chat = () => {
           g.id === clickedGroupId ? { ...g, unread: 0 } : g
         )
       );
-      return; // ✅ จบตรงนี้เลย
+      return; // จบตรงนี้เลย
     }
   
-    // ✅ ถึงตรงนี้แปลว่า: ยังไม่ได้เป็นสมาชิก
+    //  ถึงตรงนี้แปลว่า: ยังไม่ได้เป็นสมาชิก
     
     // ถ้ากลุ่มเต็ม → ห้ามเข้า
     if (isFull) {
@@ -264,7 +264,7 @@ const Chat = () => {
     window.location.href = `/end-trip/${activeChat.id}`;
   };
 
-  // ✅ กรองเฉพาะกลุ่มที่เราเป็นสมาชิก
+  // กรองเฉพาะกลุ่มที่เราเป็นสมาชิก
   const myGroups = groups.filter(g => g.members.includes(currentUser));
   const filteredGroups = myGroups.filter(g => 
     g.name.toLowerCase().includes(groupSearch.toLowerCase())

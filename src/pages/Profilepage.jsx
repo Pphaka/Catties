@@ -193,12 +193,12 @@ const ProfilePage = () => {
           <div>
             <div className="content-box">
               <h3 className="section-title">Post</h3>
-              {/* ✅ ใช้ Post component แทน PostCard */}
+              {/*ใช้ Post component แทน PostCard */}
                 <Post 
                     currentUser={{ name: profileData.name, avatar: profileData.avatar }}
                     searchTerm=""
-                    filterByOwner={true}  // ✅ เพิ่ม
-                    ownerId={profileData.name}  // ✅ เพิ่ม
+                    filterByOwner={true}  
+                    ownerId={profileData.name}  
               />
             </div>
           </div>
